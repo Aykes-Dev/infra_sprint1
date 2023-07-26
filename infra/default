@@ -1,14 +1,6 @@
-# This file will automatically load configuration files provided by other
-# applications, such as Drupal or Wordpress. These applications will be made
-# available underneath a path with that package name, such as /drupal8.
-#
-# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
-##
-
-# Default server configuration
-#
 server {
-	server_name 158.160.78.30 aykis.ddns.net www.aykis.ddns.net;
+	server_tokens off;
+	server_name aykis.ddns.net www.aykis.ddns.net;
 	
 	location /api/ {
 		proxy_pass http://127.0.0.1:8000;
@@ -33,6 +25,7 @@ server {
 }
 
 server {
+	server_tokens off;
 	server_name aykis.site www.aykis.site;
 	
 	location /media/ {
@@ -65,35 +58,11 @@ server {
 }
 
 server {
-    if ($host = aykis.ddns.net) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
+	if ($host = www.aykis.site|aykis.site|aykis.ddns.net) { 
 
-
-	listen 80;
-	server_name 158.160.78.30 aykis.ddns.net www.aykis.ddns.net;
-    return 404; # managed by Certbot
-
-
-}
-
-
-server {
-    if ($host = www.aykis.site) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    if ($host = aykis.site) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-	listen 80;
-	server_name aykis.site www.aykis.site;
-    return 404; # managed by Certbot
-
-
-
-
+		 return 301 https://$host$request_uri; 
+	} # managed by Certbot 
+	listen 80; 
+	server_name aykis.site www.aykis.site aykis.ddns.net; 
+	return 404; # managed by Certbot
 }
