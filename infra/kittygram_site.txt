@@ -1,0 +1,5 @@
+IP: 158.160.78.30;
+name_taski: https://aykis.ddns.net/;
+name_kittygram: https://www.aykis.site/;
+login: Aykis;
+password: Ayk021188; 

@@ -1,0 +1,99 @@
+# This file will automatically load configuration files provided by other
+# applications, such as Drupal or Wordpress. These applications will be made
+# available underneath a path with that package name, such as /drupal8.
+#
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
+
+# Default server configuration
+#
+server {
+	server_name 158.160.78.30 aykis.ddns.net www.aykis.ddns.net;
+	
+	location /api/ {
+		proxy_pass http://127.0.0.1:8000;
+	}
+
+	location / {
+		 root   /var/www/taski;
+		 index  index.html index.htm;
+		 try_files $uri /index.html;
+	} 
+	location /admin/ {
+	        proxy_pass http://127.0.0.1:8000;
+			    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/aykis.ddns.net/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/aykis.ddns.net/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+
+server {
+	server_name aykis.site www.aykis.site;
+	
+	location /media/ {
+		client_max_body_size 20M;		
+		alias /var/www/kittygram/media/;
+	}
+	location / {
+		root /var/www/kittygram;
+		index  index.html index.htm;
+        	try_files $uri /index.html;
+	}
+
+	location /api/ {
+		client_max_body_size 20M;
+                proxy_pass http://127.0.0.1:8080;
+    }
+    location /admin/ {
+	    client_max_body_size 20M;
+    	    proxy_pass http://127.0.0.1:8080;
+    }
+
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/aykis.ddns.net/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/aykis.ddns.net/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+
+server {
+    if ($host = aykis.ddns.net) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+	listen 80;
+	server_name 158.160.78.30 aykis.ddns.net www.aykis.ddns.net;
+    return 404; # managed by Certbot
+
+
+}
+
+
+server {
+    if ($host = www.aykis.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = aykis.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+	listen 80;
+	server_name aykis.site www.aykis.site;
+    return 404; # managed by Certbot
+
+
+
+
+}
